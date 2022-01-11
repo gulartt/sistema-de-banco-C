@@ -45,7 +45,6 @@ main(){
     printf("\n3 - Sair\n\n>> ");
 
     scanf("%d", &escolha);
-	getchar();
 
 	if(escolha == 1){
     limpaTela();
