@@ -10,6 +10,7 @@
 typedef struct Tcontas{
     char nome[30], cpf[20];
     int senha, idade;
+    float saldo;
 }contas;
 
 void imprimeMenu(void){
@@ -88,7 +89,10 @@ void main(void){
             printf("Digite uma senha (Apenas Números): ");
             scanf("%i", &conta[novaConta].senha);
             checkaConta = validaConta(conta[novaConta].nome, conta[novaConta].idade, conta[novaConta].cpf);
-            if(checkaConta == 0) novaConta++;
+            if(checkaConta == 0){
+                conta[novaConta].saldo = 3001 + ( rand() % 7000 );
+                novaConta++;
+            }
             system("PAUSE");
             limpaTela();
         }else if(escolha == '2'){
@@ -111,7 +115,7 @@ void main(void){
             limpaTela();
             printf("================== BANCO DEV ===================\n\n");
             for(int x = 0; x < novaConta; x++){
-                printf("Cliente[%i]: %s\n", x+1, conta[x].nome);
+                printf("Cliente[%i]: %s - Saldo: %.2f\n", x+1, conta[x].nome, conta[x].saldo);
             }
             printf("\n");
             system("PAUSE");
