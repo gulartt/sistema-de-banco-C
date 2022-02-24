@@ -5,71 +5,29 @@
 #include <conio.h>
 
 // Samuel Gulart Moura - https://www.linkedin.com/in/samuel-gulart-656971216 - 27/12/2021
-// Ultima alteração: 19/02
+// Ultima alteração: 23/02
 
-typedef struct Tcontas{
+typedef struct{
     char nome[30], cpf[20];
     int senha, idade;
     float saldo;
 }contas;
 
-void imprimeMenu(void){
-    printf("================== BANCO DEV ===================\n\n");
-    printf("Seja bem vindo ao Banco DEV!\n");
-    printf("escolha uma opção abaixo: ");
-    printf("\n1 - Criar conta");
-    printf("\n2 - Saque");
-    printf("\n3 - Listar contas ativas");
-    printf("\n4 - Sair\n\n");
-}
+contas conta[20];
 
-void limpaTela(void)
-{
-    system("@cls||clear");
-}
+void limpaTela(void);
 
-void quantidadeDeCedulas(int valor, int *c1, int *c5, int *c10, int *c50, int *c100, int * c200){
-    *c200 = valor /200;
-    valor = valor % 200;
-    *c100 = valor /100;
-    valor = valor % 100;
-    *c50 = valor /50;
-    valor = valor % 50;
-    *c10 = valor /10;
-    valor = valor % 10;
-    *c5 = valor /5;
-    valor = valor % 5;
-    *c1 = valor;
-}
+void imprimeMenu(void);
 
-int verificaIdade(int x){
-    if (x >= 18) return 0;
-}
+int verificaIdade(int x);
 
-int validaConta(char * nome,  int idade, char * cpf){
-    int x;
-    x = verificaIdade(idade);
-    if(x == 0){
-        limpaTela();
-        printf("================== SUA CONTA FOI CRIADA COM SUCESSO ===================\n\n");
-        printf("=========================== Dados da conta! ===========================\n\n");
-        printf("Nome do cliente: %s\n", nome);
-        printf("Idade do cliente: %i\n", idade);
-        printf("CPF do cliente: %s\n\n", cpf);
-        printf("=======================================================================\n\n");
-        return 0;
-    }else{
-        printf("================== CADASTRO DE CONTAS ===================\n\n");
-        printf("Não foi possivel criar a conta pois você é menor de idade!!\n\n");
-        printf("=========================================================\n\n");
-        return 1;
-    }
-}
+int validaConta(char * nome,  int idade, char * cpf);
+
+void quantidadeDeCedulas(int valor, int *c1, int *c5, int *c10, int *c50, int *c100, int * c200);
 
 void main(void){
     int novaConta = 0, checkaConta, valor, c1, c5, c10, c50, c100, c200;
     char escolha;
-    contas conta[20];
     setlocale(LC_ALL, "Portuguese");
 
     do{
@@ -89,7 +47,7 @@ void main(void){
             printf("Digite uma senha (Apenas Números): ");
             scanf("%i", &conta[novaConta].senha);
             checkaConta = validaConta(conta[novaConta].nome, conta[novaConta].idade, conta[novaConta].cpf);
-            if(checkaConta == 0){
+            if(checkaConta == 1){
                 conta[novaConta].saldo = 3001 + ( rand() % 7000 );
                 novaConta++;
             }
@@ -126,4 +84,57 @@ void main(void){
     printf("\nATENDIMENTO ENCERRADO!\n\n");
     Sleep(2000);
     exit(0);
+}
+
+void limpaTela(void)
+{
+    system("@cls||clear");
+}
+
+void imprimeMenu(void){
+    printf("================== BANCO DEV ===================\n\n");
+    printf("Seja bem vindo ao Banco DEV!\n");
+    printf("escolha uma opção abaixo: ");
+    printf("\n1 - Criar conta");
+    printf("\n2 - Saque");
+    printf("\n3 - Listar contas ativas");
+    printf("\n4 - Sair\n\n");
+}
+
+int verificaIdade(int x){
+    if (x >= 18) return 1;
+}
+
+int validaConta(char * nome,  int idade, char * cpf){
+    int x;
+    x = verificaIdade(idade);
+    if(x == 1){
+        limpaTela();
+        printf("================== SUA CONTA FOI CRIADA COM SUCESSO ===================\n\n");
+        printf("=========================== Dados da conta! ===========================\n\n");
+        printf("Nome do cliente: %s\n", nome);
+        printf("Idade do cliente: %i\n", idade);
+        printf("CPF do cliente: %s\n\n", cpf);
+        printf("=======================================================================\n\n");
+        return 1;
+    }else{
+        printf("================== CADASTRO DE CONTAS ===================\n\n");
+        printf("Não foi possivel criar a conta pois você é menor de idade!!\n\n");
+        printf("=========================================================\n\n");
+        return 0;
+    }
+}
+
+void quantidadeDeCedulas(int valor, int *c1, int *c5, int *c10, int *c50, int *c100, int * c200){
+    *c200 = valor /200;
+    valor = valor % 200;
+    *c100 = valor /100;
+    valor = valor % 100;
+    *c50 = valor /50;
+    valor = valor % 50;
+    *c10 = valor /10;
+    valor = valor % 10;
+    *c5 = valor /5;
+    valor = valor % 5;
+    *c1 = valor;
 }
