@@ -5,11 +5,11 @@
 #include <conio.h>
 
 // Samuel Gulart Moura - https://www.linkedin.com/in/samuel-gulart-656971216 - 27/12/2021
-// Ultima alteração: 23/02
+// Ultima alteração: 24/02
 
 typedef struct{
-    char nome[30], cpf[20];
-    int senha, idade;
+    char nome[30], cpf[20], senha[20];
+    int idade;
     float saldo;
 }contas;
 
@@ -25,9 +25,12 @@ int validaConta(char * nome,  int idade, char * cpf);
 
 void quantidadeDeCedulas(int valor, int *c1, int *c5, int *c10, int *c50, int *c100, int * c200);
 
+int extrato(char * nome, char * senha, int qtdContas);
+
 void main(void){
     int novaConta = 0, checkaConta, valor, c1, c5, c10, c50, c100, c200;
-    char escolha;
+    char escolha, nome[20], senha[20];
+    float checkaExtrato;
     setlocale(LC_ALL, "Portuguese");
 
     do{
@@ -45,7 +48,7 @@ void main(void){
             printf("Digite seu CPF: ");
             scanf("%s", &conta[novaConta].cpf);
             printf("Digite uma senha (Apenas Números): ");
-            scanf("%i", &conta[novaConta].senha);
+            scanf("%s", &conta[novaConta].senha);
             checkaConta = validaConta(conta[novaConta].nome, conta[novaConta].idade, conta[novaConta].cpf);
             if(checkaConta == 1){
                 conta[novaConta].saldo = 3001 + ( rand() % 7000 );
@@ -73,13 +76,29 @@ void main(void){
             limpaTela();
             printf("================== BANCO DEV ===================\n\n");
             for(int x = 0; x < novaConta; x++){
-                printf("Cliente[%i]: %s - Saldo: %.2f\n", x+1, conta[x].nome, conta[x].saldo);
+                printf("Cliente[%i]: %s - CPF: %s\n", x+1, conta[x].nome, conta[x].cpf);
             }
             printf("\n");
             system("PAUSE");
             limpaTela();
+        }else if(escolha == '4'){
+            limpaTela();
+            printf("================== BANCO DEV ===================\n\n");
+            printf("Insira o Login: ");
+            scanf("%s", &nome);
+            printf("Insira a senha: ");
+            scanf("%s", &senha);
+            checkaExtrato = extrato(nome, senha, novaConta);
+            if(checkaExtrato == 0){
+                system("COLOR 0C");
+                printf("\nSENHA INCORRETA OU CONTA INEXISTENTE, CANCELANDO A OPERAÇÃO!!\n\n");
+            }else{
+                printf("\nO extrato da sua conta bancaria é de: %.2f R$\n\n", checkaExtrato);
+            }
+            Sleep(3000);
+            system("COLOR 07");
         }
-    }while(escolha != '4');
+    }while(escolha != '5');
 
     printf("\nATENDIMENTO ENCERRADO!\n\n");
     Sleep(2000);
@@ -98,7 +117,8 @@ void imprimeMenu(void){
     printf("\n1 - Criar conta");
     printf("\n2 - Saque");
     printf("\n3 - Listar contas ativas");
-    printf("\n4 - Sair\n\n");
+    printf("\n4 - Extrato");
+    printf("\n5 - Sair\n\n");
 }
 
 int verificaIdade(int x){
@@ -137,4 +157,18 @@ void quantidadeDeCedulas(int valor, int *c1, int *c5, int *c10, int *c50, int *c
     *c5 = valor /5;
     valor = valor % 5;
     *c1 = valor;
+}
+
+int extrato(char * nome, char * senha, int qtdContas){
+    int retorno;
+
+    for(int i = 0; i < qtdContas; i++){
+        retorno = strcmp(conta[i].nome, nome);
+        if(retorno == 0){
+            retorno = strcmp(conta[i].senha, senha);
+            if(retorno == 0) return conta[i].saldo;
+        }
+    }
+
+    return 0;
 }
