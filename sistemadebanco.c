@@ -5,7 +5,7 @@
 #include <conio.h>
 
 // Samuel Gulart Moura - https://www.linkedin.com/in/samuel-gulart-656971216 - 27/12/2021
-// Ultima alteração: 15/03
+// Ultima alteração: 16/03
 
 typedef struct{
     char nome[30], cpf[20], senha[20];
@@ -48,16 +48,16 @@ void main(void){
             printf("\n| (__ / _ \\| |) / _ \\\\__ \\ | | |   / (_) | ");
             printf("\n \\___/_/ \\_\\___/_/ \\_\\___/ |_| |_|_\\\\___/  \n\n");
             printf("Digite seu nome  ");
-            scanf("%s", &conta[novaConta].nome);
+            gets(conta[novaConta].nome);
             setbuf(stdin, NULL);
             printf("Digite sua idade  ");
-            scanf("%i", &conta[novaConta].idade);
+            scanf("%d", &conta[novaConta].idade);
             setbuf(stdin, NULL);
             printf("Digite seu CPF  ");
-            scanf("%s", &conta[novaConta].cpf);
+            gets(conta[novaConta].cpf);
             setbuf(stdin, NULL);
-            printf("Digite uma senha (Apenas Números): ");
-            scanf("%s", &conta[novaConta].senha);
+            printf("Digite uma senha: ");
+            gets(conta[novaConta].senha);
             setbuf(stdin, NULL);
             checkaConta = validaConta(conta[novaConta].nome, conta[novaConta].idade, conta[novaConta].cpf);
             if(checkaConta == 1){
@@ -72,11 +72,12 @@ void main(void){
             printf("\n / __| /_\\ / _ \\| | | | __|");
             printf("\n \\__ \\/ _ \\ (_) | |_| | _| ");
             printf("\n |___/_/ \\_\\__\\_\\\\___/|___|\n\n");
+            setbuf(stdin, NULL);
             printf("Insira seu login [nome da conta]: ");
-            scanf("%s", &nome);
+            gets(nome);
             setbuf(stdin, NULL);
             printf("Agora insira sua senha: ");
-            scanf("%s", &senha);
+            gets(senha);
             setbuf(stdin, NULL);
             logado = loga(nome, senha, novaConta);
             if(logado != -1){
@@ -130,10 +131,11 @@ void main(void){
             printf("\n| |_) / ___ \\| |\\  | |__| |_| | | |_| | |___  \\ V / ");
             printf("\n|____/_/   \\_\\_| \\_|\\____\\___/  |____/|_____|  \\_/  \n\n");
             printf("Insira o Login [nome da conta]: ");
-            scanf("%s", &nome);
+            setbuf(stdin, NULL);
+            gets(nome);
             setbuf(stdin, NULL);
             printf("Insira a senha: ");
-            scanf("%s", &senha);
+            gets(senha);
             setbuf(stdin, NULL);
             logado = loga(nome, senha, novaConta);
             if(logado == -1){
@@ -142,7 +144,7 @@ void main(void){
             }else{
                 printf("\nO extrato da sua conta bancaria é de: %.2f R$\n\n", conta[logado].saldo);
             }
-            Sleep(3000);
+            system("PAUSE");
             system("COLOR 07");
         }
     }while(escolha != '5');
