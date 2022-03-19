@@ -72,7 +72,6 @@ void main(void){
             printf("\n / __| /_\\ / _ \\| | | | __|");
             printf("\n \\__ \\/ _ \\ (_) | |_| | _| ");
             printf("\n |___/_/ \\_\\__\\_\\\\___/|___|\n\n");
-            setbuf(stdin, NULL);
             printf("Insira seu login [nome da conta]: ");
             gets(nome);
             setbuf(stdin, NULL);
@@ -131,13 +130,18 @@ void main(void){
             printf("\n| |_) / ___ \\| |\\  | |__| |_| | | |_| | |___  \\ V / ");
             printf("\n|____/_/   \\_\\_| \\_|\\____\\___/  |____/|_____|  \\_/  \n\n");
             printf("Insira o Login [nome da conta]: ");
-            setbuf(stdin, NULL);
             gets(nome);
             setbuf(stdin, NULL);
             printf("Insira a senha: ");
             gets(senha);
             setbuf(stdin, NULL);
             logado = loga(nome, senha, novaConta);
+            limpaTela();
+            printf(" ____    _    _   _  ____ ___    ____  _______     __");
+            printf("\n| __ )  / \\  | \\ | |/ ___/ _ \\  |  _ \\| ____\\ \\   / /");
+            printf("\n|  _ \\ / _ \\ |  \\| | |  | | | | | | | |  _|  \\ \\ / / ");
+            printf("\n| |_) / ___ \\| |\\  | |__| |_| | | |_| | |___  \\ V / ");
+            printf("\n|____/_/   \\_\\_| \\_|\\____\\___/  |____/|_____|  \\_/  \n\n");
             if(logado == -1){
                 system("COLOR 0C");
                 printf("\nSENHA INCORRETA OU CONTA INEXISTENTE, CANCELANDO A OPERAÇÃO!!\n\n");
