@@ -3,9 +3,10 @@
 #include <locale.h>
 #include <windows.h>
 #include <conio.h>
+#include<time.h>
 
 // Samuel Gulart Moura - https://www.linkedin.com/in/samuel-gulart-656971216 - 27/12/2021
-// Ultima alteração: 16/03
+// Ultima alteração: 04/04
 
 typedef struct{
     char nome[30], cpf[20], senha[20];
@@ -13,7 +14,12 @@ typedef struct{
     float saldo;
 }contas;
 
+typedef struct{
+    int c1, c5, c10, c50, c100, c200;
+}notas;
+
 contas conta[20];
+notas nota;
 
 void limpaTela(void);
 
@@ -23,17 +29,18 @@ int verificaIdade(int x);
 
 int validaConta(char * nome,  int idade, char * cpf);
 
-void quantidadeDeCedulas(int valor, int *c1, int *c5, int *c10, int *c50, int *c100, int * c200);
-
-int extrato(char * nome, char * senha, int qtdContas);
+void quantidadeDeCedulas(int valor);
 
 int loga(char * nome, char * senha, int qtdContas);
 
+void criaExtrato(FILE *arquivo, int logado);
+
 void main(void){
-    int checkaConta, valor, c1, c5, c10, c50, c100, c200, logado;
+    int checkaConta, valor, logado;
     unsigned int novaConta = 0;
     char escolha, nome[20], senha[20];
     float checkaExtrato;
+    FILE *extrato;
     setlocale(LC_ALL, "Portuguese");
 
     do{
@@ -95,14 +102,14 @@ void main(void){
                     Sleep(3000);
                     system("COLOR 07");
                 }else{
-                    quantidadeDeCedulas(valor, &c1, &c5, &c10, &c50, &c100, &c200);
+                    quantidadeDeCedulas(valor);
                     printf("\n");
-                    if (c200 != 0) printf("%i cédulas de 200\n", c200);
-                    if (c100 != 0) printf("%i cédulas de 100\n", c100);
-                    if (c50 != 0) printf("%i cédulas de 50\n", c50);
-                    if (c10 != 0) printf("%i cédulas de 10\n", c10);
-                    if (c5 != 0) printf("%i cédulas de 5\n", c5);
-                    if (c1 != 0) printf("%i cédulas de 1\n", c1);
+                    if (nota.c200 != 0) printf("%i cédulas de 200\n", nota.c200);
+                    if (nota.c100 != 0) printf("%i cédulas de 100\n", nota.c100);
+                    if (nota.c50 != 0) printf("%i cédulas de 50\n", nota.c50);
+                    if (nota.c10 != 0) printf("%i cédulas de 10\n", nota.c10);
+                    if (nota.c5 != 0) printf("%i cédulas de 5\n", nota.c5);
+                    if (nota.c1 != 0) printf("%i cédulas de 1\n", nota.c1);
                     conta[logado].saldo = conta[logado].saldo - valor;
                     printf("\n");
                     system("PAUSE");
@@ -146,7 +153,11 @@ void main(void){
                 system("COLOR 0C");
                 printf("\nSENHA INCORRETA OU CONTA INEXISTENTE, CANCELANDO A OPERAÇÃO!!\n\n");
             }else{
-                printf("\nO extrato da sua conta bancaria é de: %.2f R$\n\n", conta[logado].saldo);
+                printf("\nO extrato da sua conta bancaria é de: %.2f R$\n", conta[logado].saldo);
+                extrato = fopen("Extrato.txt", "w");
+                criaExtrato(extrato, logado);
+                fclose(extrato);
+                printf("Seu arquivo de extrato foi gerado no diretório onde o programa esta localizado!\n\n");
             }
             system("PAUSE");
             system("COLOR 07");
@@ -217,18 +228,18 @@ int validaConta(char * nome,  int idade, char * cpf){
 
 // Faz a contagem de cédulas pro saque
 
-void quantidadeDeCedulas(int valor, int *c1, int *c5, int *c10, int *c50, int *c100, int * c200){
-    *c200 = valor /200;
+void quantidadeDeCedulas(int valor){
+    nota.c200 = valor /200;
     valor = valor % 200;
-    *c100 = valor /100;
+    nota.c100 = valor /100;
     valor = valor % 100;
-    *c50 = valor /50;
+    nota.c50 = valor /50;
     valor = valor % 50;
-    *c10 = valor /10;
+    nota.c10 = valor /10;
     valor = valor % 10;
-    *c5 = valor /5;
+    nota.c5 = valor /5;
     valor = valor % 5;
-    *c1 = valor;
+    nota.c1 = valor;
 }
 
 // Confere se o login e a senha enviados batem com alguma dascontas registradas
@@ -244,4 +255,15 @@ int loga(char * nome, char * senha, int qtdContas){
     }
 
     return -1;
+}
+
+void criaExtrato(FILE *arquivo, int logado){
+    srand(time(NULL));
+
+    fprintf(arquivo, "==============================================\n");
+    fprintf(arquivo, "================= BANCO DEV ==================\n");
+    fprintf(arquivo, "Cliente: %s\n", conta[logado].nome);
+    fprintf(arquivo, "ID do saque: %d\n", rand() % 10500);
+    fprintf(arquivo, "seu saldo é: %.2f\n", conta[logado].saldo);
+    fprintf(arquivo, "==============================================");
 }
